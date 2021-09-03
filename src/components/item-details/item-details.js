@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SwapiService from "../../services/swapi-service";
-import Spinner from "../spinner";
+// import Spinner from "../spinner";
 
 import "./item-details.css";
 
@@ -8,7 +8,7 @@ const Record = ({ item, field, label }) => {
   return (
     <li className="list-group-item">
       <span className="term">{label}</span>
-			<span>{field}</span>
+			<span>{item[field]}</span>
 		</li>
   )
 }
@@ -28,7 +28,6 @@ export default class ItemDetails extends Component {
 
   componentDidMount() {
     this.updateItem();
-    
   }
 
   componentDidUpdate(prevProps) {
@@ -47,10 +46,6 @@ export default class ItemDetails extends Component {
   updateItem() {
     const { itemId, getData, getImageUrl } = this.props;
 
-    if (!itemId) {
-      return
-    }
-
     getData(itemId)
       .then((item) => {
         this.setState({
@@ -61,11 +56,6 @@ export default class ItemDetails extends Component {
   }
 
 	render() {
-    const { item, image } = this.state;
-    if(!item) {
-      return <span>Select a item from list</span>;
-    }
-
     // const { loading, error } = this.state
     // const spinner = loading && !item ? <Spinner /> : null;
     // const message = !item && loading ? <span>Выберите</span> : null;
@@ -84,6 +74,12 @@ export default class ItemDetails extends Component {
     //   return <div className="item-details card">{spinner}</div>
     // }
 
+    const {item, image} = this.state
+
+    if (!item) {
+      return null
+    }
+    
     const { id, name, gender, birthYear, eyeColor } = item;
 
 		return (
@@ -93,11 +89,11 @@ export default class ItemDetails extends Component {
              alt={name}/>
 
 				<div className="card-body">
-					<h4>{name} {id}</h4>
+					<h4>{name}</h4>
 					<ul className="list-group list-group-flush">
 						{ 
-              React.Children.map(this.props.children, (child, idx) => {
-                return <li>{idx}</li>;
+              React.Children.map(this.props.children, (child) => {
+                return React.cloneElement(child, { item });
               })
             }
 					</ul>
