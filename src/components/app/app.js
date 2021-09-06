@@ -5,6 +5,7 @@ import RandomPlanet from '../random-planet';
 import ErrorIndicator from '../error-indicator';
 import ErrorBoundry from '../error-boundry';
 import Row from '../row';
+import ItemList from '../item-list';
 
 import './app.css';
 import SwapiService from '../../services/swapi-service';
@@ -31,7 +32,7 @@ export default class App extends Component {
 
     const planet = this.state.showRandomPlanet ? <RandomPlanet /> : null;
 
-    const {getPerson, getStarship, getPersonImage, getStarshipImage} =
+    const {getPerson, getStarship, getPersonImage, getStarshipImage, getAllPeople, getAllPlanets} =
       this.swapiService;
 
     const personDetails = (
@@ -59,6 +60,19 @@ export default class App extends Component {
           <Header />
 
           <Row left={personDetails} right={starshipDetails} />
+          <ItemList
+            getData={getAllPeople}
+            onItemSelected={() => {}}
+          >
+            { ({name}) => <span>{name}</span> }
+          </ItemList>
+
+          <ItemList
+            getData={getAllPlanets}
+            onItemSelected={() => {}}
+          >
+            { ({name}) => <span>{name}</span> }
+          </ItemList>
         </div>
       </ErrorBoundry>
     );
